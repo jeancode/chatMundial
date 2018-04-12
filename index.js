@@ -14,9 +14,7 @@ const ws = new WebSocket.Server({server});
 
 app.use(express.static('./app/public'));
 
-function heartbeat() {
-    this.isAlive = true;
-  }
+
 
 
 
