@@ -15,17 +15,22 @@
 
                 var textNode =  document.createElement("p");
 
-                textNode.innerHTML =  data.data;
+                var json =  JSON.parse(data.data);
 
+                textNode.innerHTML = json.mensaje;
 
+                var sleepView =  document.getElementById("sleep");
                 
+                if(json.server_sleep > 1){
+                    json.server_sleep = 0;
+                }
+
+                sleepView.innerText = "Espera: " +  json.server_sleep;
 
                 document.querySelector("#conten-view").appendChild(textNode)
             }
             
            
-
-            
 
             document.querySelector("#enviar").addEventListener('click',() =>{
 
@@ -41,6 +46,7 @@
 <body>
     
     <div>
+        <div id="sleep">Espera:0</div>
         <input type="text" id="text">
         <input type="submit" id="enviar">
     </div>
