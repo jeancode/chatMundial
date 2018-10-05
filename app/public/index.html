@@ -11,49 +11,166 @@
             
             var misocket = new WebSocket("ws://localhost/", "protocolOne");
             var timeTemp =  0;
+
+            setTimeout(function(){
+                misocket.send("holas");
+            },100);
+
             misocket.onmessage =  function(data){
 
-                var textNode =  document.createElement("p");
+                var textNode =  document.createElement("div");
+      
+         
 
                 var json =  JSON.parse(data.data);
+
+                textNode.setAttribute("class","item-view");
 
                 textNode.innerHTML = json.mensaje;
 
                 var sleepView =  document.getElementById("sleep");
                 
-                if(json.server_sleep > 1){
-                    json.server_sleep = 0;
+                if(json.server_sleep >= 1){
+                    
+                    json.server_sleep = "Enviado";
+
+                    document.querySelector("#text").value =  "";
+
+                                 
+
+                    document.querySelector("#conten-view").appendChild(textNode)
+                }else{
+
+                       sleepView.innerText = "Espera: " +  json.server_sleep;
                 }
 
-                sleepView.innerText = "Espera: " +  json.server_sleep;
 
-                document.querySelector("#conten-view").appendChild(textNode)
             }
             
-           
+            document.querySelector("#text").addEventListener('keyup',(event) =>{
 
-            document.querySelector("#enviar").addEventListener('click',() =>{
+                  if (event.keyCode === 13) {
 
-                 var  tex = document.getElementById("text").value;
+                        var  tex = document.getElementById("text").value;
 
-                 misocket.send(tex);
+                        misocket.send(tex);
+                  }
               
             });
+            
+            document.querySelector("#clear").addEventListener('click',function(){
 
+                     document.querySelector("#conten-view").innerText = "";
+
+            });
         }
     </script>
+
+    <style>
+        body{
+            margin: 0px;
+        }
+        #contenido{
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgb(24, 24, 24);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        #formulario{
+            width: 600px;
+            height: 100%;
+            background: rgb(17, 17, 17);
+            padding: 1px;
+            display: flex;
+            flex-direction: column;
+        }
+        #input{
+            flex: .2 0 0%;
+            background: rgb(38, 38, 46);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            
+        }
+        #input input[type="text"]{
+            width: 300px;
+            height: 33px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border:none;
+            outline: none;
+            padding-left: 10px;
+        }
+        #input input[type="text"]:focus{
+            box-shadow: inset 0px 0px 10px black;
+        }
+        #input input[type="submit"]{
+            width: 200px;
+            height: 30px;;
+            border-radius: 10px;
+            border:none;
+            outline: none;
+        }
+        #input input[type="submit"]:hover{
+            background: rgb(0, 81, 255);
+            color:white;
+            -webkit-transition: all .5s ease;
+        }
+        #conten-view{
+
+            flex: .8 0 0%;
+            background:  rgb(17, 17, 17);
+            overflow-x: none;
+            overflow-y: auto;
+            padding: 5px;
+        }
+        #sleep{
+            color:white;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin-bottom: 10px;
+            -webkit-user-select: none;
+        }
+        .item-view{
+            background: rgb(106, 74, 165);
+            border-radius: 10px;
+            padding: 10px;
+            color: white;
+            -webkit-user-select: none;
+            margin-top: 5px;
+            margin-bottom: 5px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+    </style>
 </head>
 <body>
     
-    <div>
-        <div id="sleep">Espera:0</div>
-        <input type="text" id="text">
-        <input type="submit" id="enviar">
+    
+<div id="contenido">
+
+
+    <div id="formulario">
+
+        <div id="input">
+            <div id="sleep">Espera:0</div>
+            <input type="text" id="text">
+            <input type="submit" id="clear" value="Limpiar mensajes">
+        </div>
+    
+        <div id="conten-view">
+
+
+        </div>
+
     </div>
 
-    <div id="conten-view">
 
+</div>
 
-    </div>
+    
+
 </body>
 </html>
